@@ -50,5 +50,26 @@ public class ChessBoard {
      */
     public void resetBoard() {
 
+        ChessPiece.PieceType[] pieces = {ChessPiece.PieceType.ROOK, ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.QUEEN, ChessPiece.PieceType.KING, ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.ROOK};
+
+        for (int i=1; i<=8; i++) {
+            ChessPosition position = new ChessPosition(2, i);
+            ChessPiece pawn = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+            addPiece(position, pawn);
+        }
+        for (int i=1; i<=8; i++) {
+            ChessPosition position = new ChessPosition(7, i);
+            ChessPiece pawn = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+            addPiece(position, pawn);
+        }
+        for (int i=1; i<=8; i++) {
+            ChessPiece.PieceType P = pieces[i];
+            ChessPosition position1 = new ChessPosition(1, i);
+            ChessPosition position2 = new ChessPosition(8, i);
+            ChessPiece piece1 = new ChessPiece(ChessGame.TeamColor.WHITE, P);
+            ChessPiece piece2 = new ChessPiece(ChessGame.TeamColor.BLACK, P);
+            addPiece(position1, piece1);
+            addPiece(position2, piece2);
+        }
     }
 }
