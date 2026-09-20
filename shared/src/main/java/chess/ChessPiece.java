@@ -169,28 +169,121 @@ public class ChessPiece {
                 }
                 break;
             case PAWN:
+                PieceType[] promotions = {ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.QUEEN, ChessPiece.PieceType.ROOK, ChessPiece.PieceType.BISHOP};
                 if (this.getTeamColor() == ChessGame.TeamColor.WHITE) {
 
                     ChessPosition row1 = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn());
                     ChessPiece r1 = board.getPiece(row1);
 
                     if (r1 == null) {
-                        ChessMove pawn_1 = new ChessMove(myPosition, row1, null);
-                        moves.add(pawn_1);
+                        if (row1.getRow() == 8) {
+                            for (PieceType p : promotions) {
+                                ChessMove pawn_1 = new ChessMove(myPosition, row1, p);
+                                moves.add(pawn_1);
+                            }
+                        } else {
+                            ChessMove pawn_1 = new ChessMove(myPosition, row1, null);
+                            moves.add(pawn_1);
                         if (myPosition.getRow() == 2) {
                             ChessPosition row2 = new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn());
                             ChessPiece r2 = board.getPiece(row2);
                             if (r2 == null) {
-                            ChessMove pawn_2 = new ChessMove(myPosition, row2, null);
-                            moves.add(pawn_2);
-
+                                ChessMove pawn_2 = new ChessMove(myPosition, row2, null);
+                                moves.add(pawn_2);
+                                }
                             }
                         }
                     }
-                    ChessPosition capture_left = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1);
-                    ChessPosition capture_right = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
+                    if (myPosition.getColumn() > 1 && myPosition.getColumn() <= 8) {
+                        ChessPosition capture_left = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1);
+                        ChessPiece l = board.getPiece(capture_left);
+                        if (l != null && l.getTeamColor() != this.getTeamColor()) {
+                            if (row1.getRow() == 8) {
+                                for (PieceType p : promotions) {
+                                    ChessMove pawn_1 = new ChessMove(myPosition, capture_left, p);
+                                    moves.add(pawn_1);
+                                }
+                            } else {
+                                    ChessMove capture = new ChessMove(myPosition, capture_left, null);
+                                    moves.add(capture);
+                                }
+                        }
+                    }
+                    if (myPosition.getColumn() >= 1 && myPosition.getColumn() < 8) {
+                        ChessPosition capture_right = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
+                        ChessPiece r = board.getPiece(capture_right);
+                        if (r != null && r.getTeamColor() != this.getTeamColor()) {
+                            if (row1.getRow() == 8) {
+                                for (PieceType p : promotions) {
+                                    ChessMove pawn_1 = new ChessMove(myPosition, capture_right, p);
+                                    moves.add(pawn_1);
+                                }
+                            } else {
+                                ChessMove capture = new ChessMove(myPosition, capture_right, null);
+                                moves.add(capture);
+                            }
+                        }
+                    }
 
-                } else {}
+                } else {
+
+
+
+
+
+                    ChessPosition row1 = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn());
+                    ChessPiece r1 = board.getPiece(row1);
+
+                    if (r1 == null) {
+                        if (row1.getRow() == 1) {
+                            for (PieceType p : promotions) {
+                                ChessMove pawn_1 = new ChessMove(myPosition, row1, p);
+                                moves.add(pawn_1);
+                            }
+                        } else {
+                            ChessMove pawn_1 = new ChessMove(myPosition, row1, null);
+                            moves.add(pawn_1);
+                            if (myPosition.getRow() == 7) {
+                                ChessPosition row2 = new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn());
+                                ChessPiece r2 = board.getPiece(row2);
+                                if (r2 == null) {
+                                    ChessMove pawn_2 = new ChessMove(myPosition, row2, null);
+                                    moves.add(pawn_2);
+                                }
+                            }
+                        }
+                    }
+                    if (myPosition.getColumn() >= 1 && myPosition.getColumn() < 8) {
+                        ChessPosition capture_left = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 1);
+                        ChessPiece l = board.getPiece(capture_left);
+                        if (l != null && l.getTeamColor() != this.getTeamColor()) {
+                            if (row1.getRow() == 1) {
+                                for (PieceType p : promotions) {
+                                    ChessMove pawn_1 = new ChessMove(myPosition, capture_left, p);
+                                    moves.add(pawn_1);
+                                }
+                            } else {
+                                ChessMove capture = new ChessMove(myPosition, capture_left, null);
+                                moves.add(capture);
+                            }
+                        }
+                    }
+                    if (myPosition.getColumn() > 1 && myPosition.getColumn() <= 8) {
+                        ChessPosition capture_right = new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 1);
+                        ChessPiece r = board.getPiece(capture_right);
+                        if (r != null && r.getTeamColor() != this.getTeamColor()) {
+                            if (row1.getRow() == 1) {
+                                for (PieceType p : promotions) {
+                                    ChessMove pawn_1 = new ChessMove(myPosition, capture_right, p);
+                                    moves.add(pawn_1);
+                                }
+                            } else {
+                                ChessMove capture = new ChessMove(myPosition, capture_right, null);
+                                moves.add(capture);
+                            }
+                        }
+                    }
+                }
                 break;
             case KNIGHT:
                 int[][] knightmoves = {{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2},{-2,-1},{-1,-2}};
