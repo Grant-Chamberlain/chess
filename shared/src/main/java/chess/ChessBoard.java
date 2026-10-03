@@ -61,6 +61,20 @@ public class ChessBoard {
 
     }
 
+    public ChessBoard boardCopy() {
+        ChessBoard newBoard = new ChessBoard();
+
+
+        for (int i = 1; i <= 8; i++ ) {
+            for (int j = 1; j <= 8; j++) {
+                ChessPosition check = new ChessPosition(i, j);
+                ChessPiece piece = getPiece(check);
+                newBoard.addPiece(check, piece);
+            }
+        }
+        return newBoard;
+    }
+
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
