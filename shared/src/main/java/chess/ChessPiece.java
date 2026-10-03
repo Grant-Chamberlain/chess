@@ -75,7 +75,7 @@ public class ChessPiece {
         switch (this.getPieceType()) {
             case ROOK:
                 int[][] directions = {{1,0},{0,1},{-1,0},{0,-1}};
-                for (int[] dir :directions) {
+                for (int[] dir : directions) {
                     int step = 1;
                     while (true) {
                         int row = myPosition.getRow() + dir[0] * step;
