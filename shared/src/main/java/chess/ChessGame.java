@@ -49,8 +49,41 @@ public class ChessGame {
      * @return Set of valid moves for requested piece, or null if no piece at
      * startPosition
      */
+    private boolean isInCheck_copy(TeamColor teamColor, ChessBoard board) {
+        ChessPosition king = findKing(teamColor);
+        for (int i = 1; i <= 8; i++ ) {
+            for (int j = 1; j <= 8; j++) {
+                ChessPosition check = new ChessPosition(i,j);
+                if (board.getPiece(check) != null && board.getPiece(check).getTeamColor() != teamColor) {
+                    Collection<ChessMove> moves = board.getPiece(check).pieceMoves(board, check);
+                    for (ChessMove move : moves) {
+                        if (move.getEndPosition().equals(king)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+
+    }
+
+
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+
+        ChessPiece piece = board.getPiece(startPosition);
+        if (piece == null) {
+            return null;
+        }
+        Collection<ChessMove> moves = piece.pieceMoves(board, startPosition);
+        for (ChessMove move : moves) {
+            ChessBoard base = board.boardCopy();
+            base.addPiece(move.getEndPosition(), piece);
+            if (isInCheck_copy(piece.getTeamColor(), base)) {
+
+
+            }
+        }
     }
 
     /**
