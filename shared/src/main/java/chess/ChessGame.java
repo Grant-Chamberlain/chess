@@ -3,6 +3,7 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A class that can manage a chess game, making moves on a board
@@ -18,6 +19,20 @@ public class ChessGame {
         board = new ChessBoard();
         board.resetBoard();
         team = TeamColor.WHITE;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessGame chessGame = (ChessGame) o;
+        return Objects.equals(board, chessGame.board) && team == chessGame.team;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(board, team);
     }
 
     /**
@@ -44,13 +59,7 @@ public class ChessGame {
         BLACK
     }
 
-    /**
-     * Gets all valid moves for a piece at the given location
-     *
-     * @param startPosition the piece to get valid moves for
-     * @return Set of valid moves for requested piece, or null if no piece at
-     * startPosition
-     */
+
 
     private ChessPosition findKing_copy(TeamColor color, ChessBoard board) {
         ChessPosition king = null;
