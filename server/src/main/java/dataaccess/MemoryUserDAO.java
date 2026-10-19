@@ -13,17 +13,19 @@ public class MemoryUserDAO implements UserDAO {
 
     @Override
     public UserData getUser(String username) throws DataAccessException {
-        return null;
+        UserData d = users.get(username);
+        return d;
     }
 
     @Override
     public void createUser(UserData data) throws DataAccessException {
+        users.put(data.username(), data);
 
     }
 
     @Override
     public void clear() throws DataAccessException {
-
+        users.clear();
     }
 
 
