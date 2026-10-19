@@ -8,8 +8,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
     </content>
     <orderEntry type="inheritedJdk" />
+    <orderEntry type="library" name="google.code.gson" level="project" />
+    <orderEntry type="library" name="slf4j.simple" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="junit.jupiter" level="project" />
     <orderEntry type="library" name="io.javalin" level="project" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="main" />
+    <orderEntry type="module" module-name="shared" scope="TEST" />
   </component>
 </module>
