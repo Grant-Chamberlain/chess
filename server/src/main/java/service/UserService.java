@@ -52,4 +52,11 @@ public class UserService {
 
 
     }
+    public void logout(String token) throws DataAccessException {
+        AuthData auth = authDAO.getAuth(token);
+        if (auth == null) {
+            throw new UnauthorizedException("Error: unauthorized");
+        }
+        authDAO.deleteAuth(token);
+    }
 }
