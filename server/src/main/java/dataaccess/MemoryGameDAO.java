@@ -36,5 +36,6 @@ public class MemoryGameDAO implements GameDAO{
     @Override
     public void clear() throws DataAccessException {
         games.clear();
+        counter = 0;
     }
 }
