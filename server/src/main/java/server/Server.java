@@ -3,6 +3,8 @@ package server;
 import com.google.gson.Gson;
 import dataaccess.*;
 import io.javalin.*;
+import model.AuthData;
+import org.eclipse.jetty.server.Authentication;
 import service.*;
 
 import java.util.Map;
@@ -30,7 +32,20 @@ public class Server {
             RegisterResult result = userService.register(request);
             ctx.result(new Gson().toJson(result));
         });
-        // Register your endpoints and exception handlers here.
+        javalin.post("/session", ctx -> {
+            LoginRequest request = new Gson().fromJson(ctx.body(), LoginRequest.class);
+            LoginResult result = userService.login(request);
+            ctx.result(new Gson().toJson(result));
+        });
+        javalin.delete("/session", ctx -> {
+            String token = ctx.header("authorization");
+            userService.logout(token);
+            ctx.result("{}");
+        });
+
+
+
+
         javalin.exception(BadRequestException.class, (e, ctx) -> {
             ctx.status(400);
             ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
@@ -45,7 +60,7 @@ public class Server {
         });
         javalin.exception(Exception.class, (e, ctx) -> {
             ctx.status(500);
-            ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+            ctx.result(new Gson().toJson(Map.of("message", "Error:" + e.getMessage())));
         });
 
     }
