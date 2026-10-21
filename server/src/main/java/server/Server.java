@@ -2,9 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.*;
-import io.javalin.*;
-import model.AuthData;
-import org.eclipse.jetty.server.Authentication;
+import io.javalin.Javalin;
 import service.*;
 
 import java.util.Map;
@@ -42,6 +40,22 @@ public class Server {
             userService.logout(token);
             ctx.result("{}");
         });
+        javalin.get("/game", ctx -> {
+            String token = ctx.header("authorization");
+            ctx.result(new Gson().toJson(gameService.listGames(token)));
+        });
+        javalin.post("/game", ctx -> {
+            String token = ctx.header("authorization");
+            CreateGameRequest request = new Gson().fromJson(ctx.body(), CreateGameRequest.class);
+            CreateGameResult game =  gameService.createGame(request, token);
+            ctx.result(new Gson().toJson(game));
+        });
+        javalin.put("/game", ctx -> {
+            String token = ctx.header("authorization");
+            JoinGameRequest request = new Gson().fromJson(ctx.body(), JoinGameRequest.class);
+            gameService.joinGame(request, token);
+            ctx.result("{}");
+        });
 
 
 
@@ -60,7 +74,7 @@ public class Server {
         });
         javalin.exception(Exception.class, (e, ctx) -> {
             ctx.status(500);
-            ctx.result(new Gson().toJson(Map.of("message", "Error:" + e.getMessage())));
+            ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
         });
 
     }
