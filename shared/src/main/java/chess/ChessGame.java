@@ -61,7 +61,7 @@ public class ChessGame {
 
 
 
-    private ChessPosition findKing_copy(TeamColor color, ChessBoard board) {
+    private ChessPosition findKingCopy(TeamColor color, ChessBoard board) {
         ChessPosition king = null;
         for (int i = 1; i <= 8; i++ ) {
             for (int j = 1; j <= 8; j++ ) {
@@ -74,8 +74,8 @@ public class ChessGame {
         }
         return king;
     }
-    private boolean isInCheck_copy(TeamColor teamColor, ChessBoard board) {
-        ChessPosition king = findKing_copy(teamColor, board);
+    private boolean isInCheckCopy(TeamColor teamColor, ChessBoard board) {
+        ChessPosition king = findKingCopy(teamColor, board);
         for (int i = 1; i <= 8; i++ ) {
             for (int j = 1; j <= 8; j++) {
                 ChessPosition check = new ChessPosition(i,j);
@@ -105,7 +105,7 @@ public class ChessGame {
             ChessBoard base = board.boardCopy();
             base.addPiece(move.getEndPosition(), piece);
             base.addPiece(move.getStartPosition(), null);
-            if (!isInCheck_copy(piece.getTeamColor(), base)) {
+            if (!isInCheckCopy(piece.getTeamColor(), base)) {
 
                 v_moves.add(move);
 
@@ -141,35 +141,11 @@ public class ChessGame {
 
 
     private ChessPosition findKing(TeamColor color) {
-        ChessPosition king = null;
-        for (int i = 1; i <= 8; i++ ) {
-            for (int j = 1; j <= 8; j++ ) {
-                ChessPosition check = new ChessPosition(i,j);
-                if (board.getPiece(check) != null && board.getPiece(check).getPieceType() == ChessPiece.PieceType.KING && color == board.getPiece(check).getTeamColor() ) {
-                    king = check;
-
-                }
-                }
-            }
-            return king;
-            }
+        return findKingCopy(color, this.board);
+    }
 
     public boolean isInCheck(TeamColor teamColor) {
-        ChessPosition king = findKing(teamColor);
-        for (int i = 1; i <= 8; i++ ) {
-            for (int j = 1; j <= 8; j++) {
-                ChessPosition check = new ChessPosition(i,j);
-                if (board.getPiece(check) != null && board.getPiece(check).getTeamColor() != teamColor) {
-                    Collection<ChessMove> moves = board.getPiece(check).pieceMoves(board, check);
-                    for (ChessMove move : moves) {
-                        if (move.getEndPosition().equals(king)) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
+        return isInCheckCopy(teamColor, this.board);
 
     }
 
@@ -183,18 +159,7 @@ public class ChessGame {
         if (!isInCheck(teamColor)) {
             return false;
         }
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++) {
-                ChessPosition check = new ChessPosition(i, j);
-                if (board.getPiece(check) != null && board.getPiece(check).getTeamColor() == teamColor) {
-                    if (!validMoves(check).isEmpty()) {
-                        return false;
-                    }
-                }
-            }
-
-        }
-        return true;
+        return hasValidMoves(teamColor);
     }
 
     /**
@@ -208,6 +173,9 @@ public class ChessGame {
         if (isInCheck(teamColor)) {
             return false;
         }
+        return hasValidMoves(teamColor);
+    }
+    private boolean hasValidMoves(TeamColor teamColor) {
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
                 ChessPosition check = new ChessPosition(i, j);
