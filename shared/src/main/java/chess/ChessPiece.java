@@ -12,8 +12,16 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessPiece {
+    private static final PieceType[] promotionTypes = {PieceType.QUEEN, PieceType.ROOK, PieceType.BISHOP, PieceType.KNIGHT};
     private final ChessGame.TeamColor pieceColor;
     private final ChessPiece.PieceType type;
+
+    public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
+        this.pieceColor = pieceColor;
+        this.type = type;
+
+
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -27,26 +35,6 @@ public class ChessPiece {
     @Override
     public int hashCode() {
         return Objects.hash(pieceColor, type);
-    }
-
-    public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
-        this.pieceColor = pieceColor;
-        this.type = type;
-
-
-
-    }
-
-    /**
-     * The various different chess piece options
-     */
-    public enum PieceType {
-        KING,
-        QUEEN,
-        BISHOP,
-        KNIGHT,
-        ROOK,
-        PAWN
     }
 
     /**
@@ -74,15 +62,15 @@ public class ChessPiece {
         List<ChessMove> moves = new ArrayList<>();
         switch (this.getPieceType()) {
             case ROOK:
-                int[][] rookDirections = {{1,0},{0,1},{-1,0},{0,-1}};
+                int[][] rookDirections = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
                 moves.addAll(slideMoves(board, myPosition, rookDirections));
                 break;
             case BISHOP:
-                int[][] bishopDirections = {{1,1},{-1,1},{-1,-1},{1,-1}};
+                int[][] bishopDirections = {{1, 1}, {-1, 1}, {-1, -1}, {1, -1}};
                 moves.addAll(slideMoves(board, myPosition, bishopDirections));
                 break;
             case QUEEN:
-                int[][] queenDirections = {{1,1},{-1,1},{-1,-1},{1,-1},{1,0},{0,1},{-1,0},{0,-1}};
+                int[][] queenDirections = {{1, 1}, {-1, 1}, {-1, -1}, {1, -1}, {1, 0}, {0, 1}, {-1, 0}, {0, -1}};
                 moves.addAll(slideMoves(board, myPosition, queenDirections));
                 break;
             case KING:
@@ -93,37 +81,39 @@ public class ChessPiece {
                 moves.addAll(pawnMoves(board, myPosition));
                 break;
             case KNIGHT:
-                int[][] knightmoves = {{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2},{-2,-1},{-1,-2}};
-                moves.addAll(stepMoves(board, myPosition, knightmoves));
+                int[][] knightDirections = {{-2, 1}, {-1, 2}, {1, 2}, {2, 1}, {2, -1}, {1, -2}, {-2, -1}, {-1, -2}};
+                moves.addAll(stepMoves(board, myPosition, knightDirections));
                 break;
         }
 
         return moves;
     }
+
     private Collection<ChessMove> stepMoves(ChessBoard board, ChessPosition myPosition, int[][] moveset) {
         Collection<ChessMove> moves = new ArrayList<>();
 
-            // the body of your KING loop goes here
-            for (int[] move : moveset) {
-                int row = myPosition.getRow() + move[0];
-                int col = myPosition.getColumn()+ move[1];
-                if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
-                    ChessPosition p = new ChessPosition(row, col);
-                    ChessPiece val = board.getPiece(p);
-                    if (val == null) {
-                        ChessMove M = new ChessMove(myPosition, p, null);
-                        moves.add(M);
-                    } else if (val.getTeamColor() != this.getTeamColor()) {
-                        ChessMove M = new ChessMove(myPosition, p, null);
-                        moves.add(M);
+        // the body of your KING loop goes here
+        for (int[] move : moveset) {
+            int row = myPosition.getRow() + move[0];
+            int col = myPosition.getColumn() + move[1];
+            if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
+                ChessPosition chessPosition = new ChessPosition(row, col);
+                ChessPiece chessPiece = board.getPiece(chessPosition);
+                if (chessPiece == null) {
+                    ChessMove chessMove = new ChessMove(myPosition, chessPosition, null);
+                    moves.add(chessMove);
+                } else if (chessPiece.getTeamColor() != this.getTeamColor()) {
+                    ChessMove M = new ChessMove(myPosition, chessPosition, null);
+                    moves.add(M);
 
-                    }
                 }
-
             }
+
+        }
 
         return moves;
     }
+
     private Collection<ChessMove> slideMoves(ChessBoard board, ChessPosition myPosition, int[][] moveset) {
         Collection<ChessMove> moves = new ArrayList<>();
         for (int[] dir : moveset) {
@@ -133,24 +123,27 @@ public class ChessPiece {
                 int col = myPosition.getColumn() + dir[1] * step;
 
                 if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
-                    ChessPosition p = new ChessPosition(row, col);
-                    ChessPiece val = board.getPiece(p);
+                    ChessPosition chessPosition = new ChessPosition(row, col);
+                    ChessPiece chessPiece = board.getPiece(chessPosition);
 
-                    if (val == null) {
-                        ChessMove M = new ChessMove(myPosition, p, null);
-                        moves.add(M);
+                    if (chessPiece == null) {
+                        ChessMove chessMove = new ChessMove(myPosition, chessPosition, null);
+                        moves.add(chessMove);
                         step++;
-                    } else if (val.getTeamColor() != this.getTeamColor()) {
-                        ChessMove M = new ChessMove(myPosition, p, null);
-                        moves.add(M);
+                    } else if (chessPiece.getTeamColor() != this.getTeamColor()) {
+                        ChessMove chessMove = new ChessMove(myPosition, chessPosition, null);
+                        moves.add(chessMove);
                         break;
-                    } else break;
-                } else break;
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
             }
         }
         return moves;
     }
-    private static final PieceType[] promotionTypes = {PieceType.QUEEN, PieceType.ROOK, PieceType.BISHOP, PieceType.KNIGHT};
 
     private void addPawnMove(Collection<ChessMove> moves, ChessPosition start, ChessPosition end, int promotionRow) {
         if (end.getRow() == promotionRow) {
@@ -161,6 +154,7 @@ public class ChessPiece {
             moves.add(new ChessMove(start, end, null));
         }
     }
+
     private Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition position) {
         Collection<ChessMove> moves = new ArrayList<>();
         boolean isWhite = this.getTeamColor() == ChessGame.TeamColor.WHITE;
@@ -192,5 +186,17 @@ public class ChessPiece {
             }
         }
         return moves;
+    }
+
+    /**
+     * The various different chess piece options
+     */
+    public enum PieceType {
+        KING,
+        QUEEN,
+        BISHOP,
+        KNIGHT,
+        ROOK,
+        PAWN
     }
 }

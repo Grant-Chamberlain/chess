@@ -13,23 +13,23 @@ public class ChessPosition {
     private final int row;
     private final int col;
 
+    public ChessPosition(int row, int col) {
+        this.row = row;
+        this.col = col;
+    }
+
     @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        ChessPosition that = (ChessPosition) o;
-        return row == that.row && col == that.col;
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        ChessPosition otherPosition = (ChessPosition) object;
+        return row == otherPosition.row && col == otherPosition.col;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(row, col);
-    }
-
-
-
-    public ChessPosition(int row, int col) {
-        this.row = row;
-        this.col = col;
     }
 
     /**
