@@ -13,9 +13,14 @@ public class UserService {
     private final UserDAO userDAO;
     private final AuthDAO authDAO;
 
-    public UserService(UserDAO user, AuthDAO auth) {
-        userDAO = user;
-        authDAO = auth;
+    public UserService(UserDAO userDAO, AuthDAO authDAO) {
+        this.userDAO = userDAO;
+        this.authDAO = authDAO;
+    }
+    private String createAuth(String username) throws DataAccessException {
+        String token = UUID.randomUUID().toString();
+        authDAO.createAuth(new AuthData(token, username));
+        return token;
     }
 
     public LoginResult login(LoginRequest request) throws DataAccessException {
@@ -31,9 +36,7 @@ public class UserService {
         if (!request.password().equals(user.password())) {
             throw new UnauthorizedException("Error: unauthorized");
         }
-       String token = UUID.randomUUID().toString();
-       AuthData data = new AuthData(token, request.username());
-       authDAO.createAuth(data);
+       String token = createAuth(request.username());
        return new LoginResult(request.username(), token);
     }
     public RegisterResult register(RegisterRequest request) throws DataAccessException {
@@ -44,9 +47,7 @@ public class UserService {
             throw new AlreadyTakenException("Error: already taken");
         }
         UserData user = new UserData(request.username(), request.password(), request.email());
-        String token = UUID.randomUUID().toString();
-        AuthData data = new AuthData(token, request.username());
-        authDAO.createAuth(data);
+        String token = createAuth(request.username());
         userDAO.createUser(user);
         return new RegisterResult(request.username(), token);
 

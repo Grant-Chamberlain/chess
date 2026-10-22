@@ -2,7 +2,6 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -13,12 +12,12 @@ import java.util.Objects;
  */
 public class ChessGame {
     private ChessBoard board;
-    private TeamColor teamColor;
+    private TeamColor teamTurn;
 
     public ChessGame() {
         board = new ChessBoard();
         board.resetBoard();
-        teamColor = TeamColor.WHITE;
+        teamTurn = TeamColor.WHITE;
     }
 
     @Override
@@ -27,19 +26,19 @@ public class ChessGame {
             return false;
         }
         ChessGame otherGame = (ChessGame) o;
-        return Objects.equals(board, otherGame.board) && teamColor == otherGame.teamColor;
+        return Objects.equals(board, otherGame.board) && teamTurn == otherGame.teamTurn;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(board, teamColor);
+        return Objects.hash(board, teamTurn);
     }
 
     /**
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        return teamColor;
+        return teamTurn;
     }
 
     /**
@@ -48,7 +47,7 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        this.teamColor = team;
+        this.teamTurn = team;
     }
 
     /**
@@ -61,28 +60,28 @@ public class ChessGame {
 
 
 
-    private ChessPosition findKingOnBoard(TeamColor teamColor, ChessBoard board) {
-        ChessPosition king = null;
-        for (int i = 1; i <= 8; i++ ) {
-            for (int j = 1; j <= 8; j++ ) {
-                ChessPosition chessPosition = new ChessPosition(i,j);
-                if (board.getPiece(chessPosition) != null && board.getPiece(chessPosition).getPieceType() == ChessPiece.PieceType.KING && teamColor == board.getPiece(chessPosition).getTeamColor() ) {
-                    king = chessPosition;
-
+    private ChessPosition findKingOnBoard(TeamColor kingColor, ChessBoard board) {
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                ChessPosition position = new ChessPosition(row, col);
+                ChessPiece piece = board.getPiece(position);
+                if (piece != null && piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == kingColor) {
+                    return position;
                 }
             }
         }
-        return king;
+        return null;
     }
-    private boolean isInCheckOnBoard(TeamColor teamColor, ChessBoard board) {
-        ChessPosition king = findKingOnBoard(teamColor, board);
-        for (int i = 1; i <= 8; i++ ) {
-            for (int j = 1; j <= 8; j++) {
-                ChessPosition chessPosition = new ChessPosition(i,j);
-                if (board.getPiece(chessPosition) != null && board.getPiece(chessPosition).getTeamColor() != teamColor) {
-                    Collection<ChessMove> moves = board.getPiece(chessPosition).pieceMoves(board, chessPosition);
-                    for (ChessMove move : moves) {
-                        if (move.getEndPosition().equals(king)) {
+
+    private boolean isInCheckOnBoard(TeamColor kingColor, ChessBoard board) {
+        ChessPosition kingPosition = findKingOnBoard(kingColor, board);
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                ChessPosition position = new ChessPosition(row, col);
+                ChessPiece piece = board.getPiece(position);
+                if (piece != null && piece.getTeamColor() != kingColor) {
+                    for (ChessMove move : piece.pieceMoves(board, position)) {
+                        if (move.getEndPosition().equals(kingPosition)) {
                             return true;
                         }
                     }
@@ -90,25 +89,22 @@ public class ChessGame {
             }
         }
         return false;
-
     }
 
 
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        List<ChessMove> validMoves = new ArrayList<>();
+        Collection<ChessMove> validMoves = new ArrayList<>();
         ChessPiece piece = board.getPiece(startPosition);
         if (piece == null) {
             return null;
         }
         Collection<ChessMove> moves = piece.pieceMoves(board, startPosition);
         for (ChessMove move : moves) {
-            ChessBoard base = board.boardCopy();
-            base.addPiece(move.getEndPosition(), piece);
-            base.addPiece(move.getStartPosition(), null);
-            if (!isInCheckOnBoard(piece.getTeamColor(), base)) {
-
+            ChessBoard boardAfterMove = board.copy();
+            boardAfterMove.addPiece(move.getEndPosition(), piece);
+            boardAfterMove.addPiece(move.getStartPosition(), null);
+            if (!isInCheckOnBoard(piece.getTeamColor(), boardAfterMove)) {
                 validMoves.add(move);
-
             }
         }
         return validMoves;
@@ -123,7 +119,7 @@ public class ChessGame {
     public void makeMove(ChessMove move) throws InvalidMoveException {
         ChessPiece piece = board.getPiece(move.getStartPosition());
         Collection<ChessMove> legalMoves = validMoves(move.getStartPosition());
-        if (legalMoves == null || !legalMoves.contains(move) || piece.getTeamColor() != teamColor) {
+        if (legalMoves == null || !legalMoves.contains(move) || piece.getTeamColor() != teamTurn) {
             throw new InvalidMoveException();
         }
 
@@ -132,17 +128,14 @@ public class ChessGame {
         }
         board.addPiece(move.getEndPosition(), piece);
         board.addPiece(move.getStartPosition(), null);
-        if (teamColor == TeamColor.BLACK) {
-            teamColor = TeamColor.WHITE;
+        if (teamTurn == TeamColor.BLACK) {
+            teamTurn = TeamColor.WHITE;
         } else {
-            teamColor = TeamColor.BLACK;
+            teamTurn = TeamColor.BLACK;
         }
     }
 
 
-    private ChessPosition findKing(TeamColor color) {
-        return findKingOnBoard(color, this.board);
-    }
 
     public boolean isInCheck(TeamColor teamColor) {
         return isInCheckOnBoard(teamColor, this.board);

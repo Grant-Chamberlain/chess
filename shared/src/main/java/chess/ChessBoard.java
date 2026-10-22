@@ -12,6 +12,8 @@ import java.util.Objects;
 public class ChessBoard {
 
     private final ChessPiece[][] board;
+    private static final ChessPiece.PieceType[] BACK_RANK_ORDER = {ChessPiece.PieceType.ROOK, ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.QUEEN, ChessPiece.PieceType.KING, ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.ROOK};
+
 
     public ChessBoard() {
 
@@ -61,7 +63,7 @@ public class ChessBoard {
 
     }
 
-    public ChessBoard boardCopy() {
+    public ChessBoard copy() {
         ChessBoard newBoard = new ChessBoard();
 
 
@@ -81,7 +83,6 @@ public class ChessBoard {
      */
     public void resetBoard() {
 
-        ChessPiece.PieceType[] backRankPieceTypes = {ChessPiece.PieceType.ROOK, ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.QUEEN, ChessPiece.PieceType.KING, ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.ROOK};
 
         for (int i = 1; i <= 8; i++) {
             ChessPosition position = new ChessPosition(2, i);
@@ -94,7 +95,7 @@ public class ChessBoard {
             addPiece(position, pawn);
         }
         for (int i = 1; i <= 8; i++) {
-            ChessPiece.PieceType pieceType = backRankPieceTypes[i];
+            ChessPiece.PieceType pieceType = BACK_RANK_ORDER[i];
             ChessPosition whitePosition = new ChessPosition(1, i);
             ChessPosition blackPosition = new ChessPosition(8, i);
             ChessPiece piece1 = new ChessPiece(ChessGame.TeamColor.WHITE, pieceType);

@@ -29,12 +29,12 @@ public class GameService {
     public ListGamesResult listGames(String token) throws DataAccessException {
         verifyToken(token);
         Collection<GameData> games = gameDAO.listGames();
-        Collection<GameSummary> game_sum = new ArrayList<>();
+        Collection<GameSummary> gameSummaries = new ArrayList<>();
         for (GameData game : games) {
-            GameSummary sum = new GameSummary(game.gameID(),game.whiteUsername(), game.blackUsername(), game.gameName());
-            game_sum.add(sum);
+            GameSummary gameSummary = new GameSummary(game.gameID(),game.whiteUsername(), game.blackUsername(), game.gameName());
+            gameSummaries.add(gameSummary);
         }
-        return new ListGamesResult(game_sum);
+        return new ListGamesResult(gameSummaries);
     }
 
     public CreateGameResult createGame(CreateGameRequest request, String token) throws DataAccessException {
