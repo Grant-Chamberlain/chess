@@ -79,13 +79,20 @@ public class ChessGame {
             for (int col = 1; col <= 8; col++) {
                 ChessPosition position = new ChessPosition(row, col);
                 ChessPiece piece = board.getPiece(position);
-                if (piece != null && piece.getTeamColor() != kingColor) {
-                    for (ChessMove move : piece.pieceMoves(board, position)) {
-                        if (move.getEndPosition().equals(kingPosition)) {
-                            return true;
-                        }
-                    }
+                if (piece != null && piece.getTeamColor() != kingColor
+                        && canAttack(piece, position, kingPosition, board)) {
+                    return true;
                 }
+            }
+
+        }
+        return false;
+    }
+    private boolean canAttack(ChessPiece piece, ChessPosition from,
+                              ChessPosition target, ChessBoard board) {
+        for (ChessMove move : piece.pieceMoves(board, from)) {
+            if (move.getEndPosition().equals(target)) {
+                return true;
             }
         }
         return false;

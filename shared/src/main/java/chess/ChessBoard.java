@@ -12,7 +12,15 @@ import java.util.Objects;
 public class ChessBoard {
 
     private final ChessPiece[][] board;
-    private static final ChessPiece.PieceType[] BACK_RANK_ORDER = {ChessPiece.PieceType.ROOK, ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.QUEEN, ChessPiece.PieceType.KING, ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.ROOK};
+    private static final ChessPiece.PieceType[] BACK_RANK_ORDER = {ChessPiece.PieceType.ROOK,
+        ChessPiece.PieceType.ROOK,
+        ChessPiece.PieceType.KNIGHT,
+        ChessPiece.PieceType.BISHOP,
+        ChessPiece.PieceType.QUEEN,
+        ChessPiece.PieceType.KING,
+        ChessPiece.PieceType.BISHOP,
+        ChessPiece.PieceType.KNIGHT,
+        ChessPiece.PieceType.ROOK};
 
 
     public ChessBoard() {
