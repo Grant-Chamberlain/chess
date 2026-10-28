@@ -23,7 +23,7 @@ public class Server {
             throw new RuntimeException("Unable to initialize database", e);
         }
 
-        UserDAO userDAO = new MemoryUserDAO();
+        UserDAO userDAO = new MySqlUserDAO();
         GameDAO gameDAO = new MemoryGameDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
 
