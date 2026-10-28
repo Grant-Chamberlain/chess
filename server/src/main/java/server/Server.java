@@ -16,6 +16,13 @@ public class Server {
     private final Gson gson = new Gson();
 
     public Server() {
+
+        try {
+            DatabaseInitializer.initialize();
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Unable to initialize database", e);
+        }
+
         UserDAO userDAO = new MemoryUserDAO();
         GameDAO gameDAO = new MemoryGameDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
