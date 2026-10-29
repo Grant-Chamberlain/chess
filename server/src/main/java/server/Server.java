@@ -2,6 +2,9 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.*;
+import dataaccess.sql.MySqlAuthDAO;
+import dataaccess.sql.MySqlGameDAO;
+import dataaccess.sql.MySqlUserDAO;
 import io.javalin.Javalin;
 import service.*;
 

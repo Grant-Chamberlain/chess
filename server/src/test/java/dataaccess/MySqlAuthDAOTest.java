@@ -1,5 +1,7 @@
 package dataaccess;
 
+import dataaccess.sql.MySqlAuthDAO;
+import dataaccess.sql.MySqlUserDAO;
 import model.AuthData;
 import model.UserData;
 import org.junit.jupiter.api.BeforeEach;

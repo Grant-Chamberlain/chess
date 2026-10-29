@@ -1,10 +1,13 @@
-package dataaccess;
+package dataaccess.sql;
 
+import dataaccess.AuthDAO;
+import dataaccess.DataAccessException;
+import dataaccess.DatabaseManager;
 import model.AuthData;
 
 import java.sql.SQLException;
 
-public class MySqlAuthDAO implements AuthDAO{
+public class MySqlAuthDAO implements AuthDAO {
     @Override
     public void createAuth(AuthData data) throws DataAccessException {
         String sql = "INSERT INTO auth (authToken, username) VALUES (?, ?)";

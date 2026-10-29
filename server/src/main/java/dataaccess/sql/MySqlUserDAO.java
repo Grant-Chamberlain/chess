@@ -1,10 +1,13 @@
-package dataaccess;
+package dataaccess.sql;
 
+import dataaccess.DataAccessException;
+import dataaccess.DatabaseManager;
+import dataaccess.UserDAO;
 import model.UserData;
 
 import java.sql.SQLException;
 
-public class MySqlUserDAO implements UserDAO{
+public class MySqlUserDAO implements UserDAO {
     @Override
     public UserData getUser(String username) throws DataAccessException {
         String sql = "SELECT username, password, email FROM user WHERE username = ?";
