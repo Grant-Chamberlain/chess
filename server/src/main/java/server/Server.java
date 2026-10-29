@@ -24,7 +24,7 @@ public class Server {
         }
 
         UserDAO userDAO = new MySqlUserDAO();
-        GameDAO gameDAO = new MemoryGameDAO();
+        GameDAO gameDAO = new MySqlGameDAO();
         AuthDAO authDAO = new MySqlAuthDAO();
 
         userService = new UserService(userDAO, authDAO);
