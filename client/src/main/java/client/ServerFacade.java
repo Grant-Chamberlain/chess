@@ -41,7 +41,7 @@ public class ServerFacade {
     }
 
     public ListGamesResult listGames(String authToken) throws ResponseException {
-        return send("Get", "/game", null, authToken, ListGamesResult.class);
+        return send("GET", "/game", null, authToken, ListGamesResult.class);
     }
 
     public void joinGame(JoinGameRequest request, String authToken) throws ResponseException {
