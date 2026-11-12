@@ -72,6 +72,14 @@ public class ServerFacade {
 
     private <T> T handleResponse(HttpResponse<String> response, Class<T> responseClass)
             throws ResponseException {
-
+        if (response.statusCode() != HTTP_OK) {
+            throw new ResponseException(response.statusCode(), errorMessage(response));
+        }
+        if (responseClass == null) {
+            return null;
+        }
+        return gson.fromJson(response.body(), responseClass);
     }
+
+    private String errorMessage
 }
