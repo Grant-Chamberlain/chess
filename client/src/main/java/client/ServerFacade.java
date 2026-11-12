@@ -26,13 +26,15 @@ public class ServerFacade {
     public RegisterResult register(RegisterRequest request) throws ResponseException {
         return send("POST", "/user", request, null, RegisterResult.class);
     }
+
     public LoginResult login(LoginRequest request) throws ResponseException {
         return send("POST", "/session", request, null, LoginResult.class);
     }
 
     public void logout(String authToken) throws ResponseException {
-        send("DELETE", "/session" , null , authToken, null);
+        send("DELETE", "/session", null, authToken, null);
     }
+
     public CreateGameResult createGame(CreateGameRequest request, String authToken)
             throws ResponseException {
         return send("POST", "/game", request, authToken, CreateGameResult.class);
@@ -45,22 +47,19 @@ public class ServerFacade {
     public void joinGame(JoinGameRequest request, String authToken) throws ResponseException {
         send("PUT", "/game", request, authToken, null);
     }
+
     public void clear() throws ResponseException {
-        send("DELETE", "/db", null, null,null);
+        send("DELETE", "/db", null, null, null);
     }
 
 
     private <T> T send(String method, String path, Object body, String authToken,
-                         Class<T> responseClass) throws ResponseException {
+                       Class<T> responseClass) throws ResponseException {
 
         HttpRequest request = buildRequest(method, path, body, authToken);
         HttpResponse<String> response = execute(request);
         return handleResponse(response, responseClass);
     }
-
-
-
-
 
 
     private HttpRequest buildRequest(String method, String path, Object body, String authToken) {
@@ -71,7 +70,7 @@ public class ServerFacade {
             builder.header("Content-Type", "application/json");
         }
         if (authToken != null) {
-            builder.header("authorization" , authToken);
+            builder.header("authorization", authToken);
         }
         return builder.build();
     }
@@ -82,6 +81,7 @@ public class ServerFacade {
         }
         return HttpRequest.BodyPublishers.ofString(gson.toJson(body));
     }
+
     private HttpResponse<String> execute(HttpRequest request) throws ResponseException {
         try {
             return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
