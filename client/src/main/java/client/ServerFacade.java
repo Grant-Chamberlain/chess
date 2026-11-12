@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import service.RegisterRequest;
 import service.RegisterResult;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class ServerFacade {
     private static final int HTTP_OK = 200;
@@ -25,9 +27,11 @@ public class ServerFacade {
     }
 
 
-    private <T> T send(String method, String path, Object body, String authtoken,
+    private <T> T send(String method, String path, Object body, String authToken,
                          Class<T> responseClass) throws ResponseException {
-        HttpRequest request = b
+        HttpRequest request = buildRequest(method, path, body, authToken);
+        HttpResponse<String> response = execute(request);
+        return handleResponse(response, responseClass);
     }
 
 
@@ -53,5 +57,21 @@ public class ServerFacade {
             return HttpRequest.BodyPublishers.noBody();
         }
         return HttpRequest.BodyPublishers.ofString(gson.toJson(body));
+    }
+    private HttpResponse<String> execute(HttpRequest request) throws ResponseException {
+        try {
+            return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            throw new ResponseException(HTTP_SERVER_ERROR, "Could not reach the server");
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new ResponseException(HTTP_SERVER_ERROR, "Request was interrupted");
+        }
+    }
+
+    private <T> T handleResponse(HttpResponse<String> response, Class<T> responseClass)
+            throws ResponseException {
+
     }
 }
