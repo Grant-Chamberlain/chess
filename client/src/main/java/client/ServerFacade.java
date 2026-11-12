@@ -3,8 +3,7 @@ package client;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import service.RegisterRequest;
-import service.RegisterResult;
+import service.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -25,12 +24,35 @@ public class ServerFacade {
     }
 
     public RegisterResult register(RegisterRequest request) throws ResponseException {
-        return send("Post", "/user", request, null, RegisterResult.class);
+        return send("POST", "/user", request, null, RegisterResult.class);
+    }
+    public LoginResult login(LoginRequest request) throws ResponseException {
+        return send("POST", "/session", request, null, LoginResult.class);
+    }
+
+    public void logout(String authToken) throws ResponseException {
+        send("DELETE", "/session" , null , authToken, null);
+    }
+    public CreateGameResult createGame(CreateGameRequest request, String authToken)
+            throws ResponseException {
+        return send("POST", "/game", request, authToken, CreateGameResult.class);
+    }
+
+    public ListGamesResult listGames(String authToken) throws ResponseException {
+        return send("Get", "/game", null, authToken, ListGamesResult.class);
+    }
+
+    public void joinGame(JoinGameRequest request, String authToken) throws ResponseException {
+        send("PUT", "/game", request, authToken, null);
+    }
+    public void clear() throws ResponseException {
+        send("DELETE", "/db", null, null,null);
     }
 
 
     private <T> T send(String method, String path, Object body, String authToken,
                          Class<T> responseClass) throws ResponseException {
+
         HttpRequest request = buildRequest(method, path, body, authToken);
         HttpResponse<String> response = execute(request);
         return handleResponse(response, responseClass);
