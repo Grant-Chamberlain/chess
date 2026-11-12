@@ -1,6 +1,8 @@
 package client;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import service.RegisterRequest;
 import service.RegisterResult;
 
@@ -81,5 +83,12 @@ public class ServerFacade {
         return gson.fromJson(response.body(), responseClass);
     }
 
-    private String errorMessage
+    private String errorMessage(HttpResponse<String> response) {
+        try {
+            JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
+            return json.get("message").getAsString();
+        } catch (RuntimeException e) {
+            return "Request failed with status " + response.statusCode();
+        }
+    }
 }
