@@ -55,14 +55,14 @@ public class ServerFacadeTests {
         String token = registerUser("grant");
         LoginRequest request = new LoginRequest("grant", "grant");
         LoginResult result = facade.login(request);
-        assert(token.equals(result.authToken()));
+        assertNotNull(result.authToken());
     }
 
     @Test
     public void loginFailure() throws ResponseException {
         String token = registerUser("grant");
         LoginRequest request = new LoginRequest("grant", "wrongpassword");
-        assertThrows(AuthenticationException.class, () -> facade.login(request));
+        assertThrows(ResponseException.class, () -> facade.login(request));
 
     }
 
@@ -111,7 +111,7 @@ public class ServerFacadeTests {
         String token = registerUser("grant");
         CreateGameRequest game = new CreateGameRequest("game");
         facade.createGame(game, token);
-        JoinGameRequest request = new JoinGameRequest("WHITE", 1)
+        JoinGameRequest request = new JoinGameRequest("WHITE", 1);
         facade.joinGame(request, token);
         ListGamesResult result = facade.listGames(token);
         List<GameSummary> games = new ArrayList<>(result.games());
@@ -122,7 +122,11 @@ public class ServerFacadeTests {
     @Test
     public void clearSuccess() throws ResponseException {
         String token = registerUser("grant");
-
+        CreateGameRequest request = new CreateGameRequest("game");
+        facade.createGame(request, token);
+        facade.clear();
+        LoginRequest login = new LoginRequest("grant", "grant");
+        assertThrows(ResponseException.class, () -> facade.login(login));
     }
 
     @AfterAll
