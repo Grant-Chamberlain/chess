@@ -28,7 +28,7 @@ public class Repl {
     private boolean preloginStep() {
         System.out.print("[LOGGED_OUT] >>> ");
         String result = prelogin.eval(scanner.nextLine());
-        if (result.equals(PreloginClient.quit)) {
+        if (result.equals(PreloginClient.QUIT)) {
             return false;
         }
         System.out.println(result);

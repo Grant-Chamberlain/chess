@@ -6,6 +6,7 @@ import dataaccess.sql.MySqlAuthDAO;
 import dataaccess.sql.MySqlGameDAO;
 import dataaccess.sql.MySqlUserDAO;
 import io.javalin.Javalin;
+import model.*;
 import service.*;
 
 import java.util.Map;

@@ -1,10 +1,8 @@
 package client;
 
+import model.*;
 import org.junit.jupiter.api.*;
 import server.Server;
-import service.*;
-
-import javax.naming.AuthenticationException;
 
 import java.util.ArrayList;
 import java.util.List;

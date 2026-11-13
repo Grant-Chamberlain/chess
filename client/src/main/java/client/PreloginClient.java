@@ -1,15 +1,14 @@
 package client;
 
-import service.LoginRequest;
-import service.RegisterRequest;
-import service.RegisterResult;
-import service.LoginResult;
+import model.LoginRequest;
+import model.RegisterRequest;
+import model.RegisterResult;
+import model.LoginResult;
 
-import java.util.Locale;
 import java.util.Scanner;
 
 public class PreloginClient {
-    public static final String quit = "quit";
+    public static final String QUIT = "quit";
 
     private final ServerFacade facade;
     private final Scanner scanner;
@@ -26,7 +25,7 @@ public class PreloginClient {
         return switch (command) {
             case "register" -> register();
             case "login" -> login();
-            case quit -> quit;
+            case QUIT -> QUIT;
             default -> help();
         };
     }
@@ -54,7 +53,7 @@ public class PreloginClient {
                     facade.register(new RegisterRequest(newUsername, passwrod, email));
             return startSession(result.username(), result.authToken());
         } catch (ResponseException e) {
-            return "Login failed:" + e.getMessage();
+            return "Registration failed:" + e.getMessage();
         }
 
     }

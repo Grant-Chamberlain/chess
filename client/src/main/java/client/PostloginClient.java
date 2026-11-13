@@ -2,15 +2,12 @@ package client;
 
 import chess.ChessBoard;
 import chess.ChessGame;
-import chess.ChessPiece;
-import chess.ChessPosition;
-import service.CreateGameRequest;
-import service.GameSummary;
-import service.JoinGameRequest;
+import model.CreateGameRequest;
+import model.GameSummary;
+import model.JoinGameRequest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class PostloginClient {
