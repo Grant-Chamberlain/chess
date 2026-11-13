@@ -32,7 +32,7 @@ public class BoardPrinter {
         StringBuilder line = new StringBuilder(BORDER_STYLE).append("   ");
         for (int i = 0; i < BOARD_SIZE; i++) {
             int col = whiteAtBottom ? i + 1 : BOARD_SIZE - i;
-            line.append(' ').append(COLUMN_LETTERS.charAt(col - 1)).append(' ');
+            line.append("  ").append(COLUMN_LETTERS.charAt(col - 1)).append(" ");
         }
         line.append("   ").append(RESET_BG_COLOR).append(RESET_TEXT_COLOR);
         return line.append(System.lineSeparator()).toString();

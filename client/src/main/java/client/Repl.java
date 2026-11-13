@@ -24,14 +24,6 @@ public class Repl {
                 postloginStep();
             }
         }
-        String result = "";
-        while (!result.equals(PreloginClient.quit)) {
-            System.out.print("[LOGGED_OUT] >>> ");
-            result = prelogin.eval(scanner.nextLine());
-            if (!result.equals(PreloginClient.quit)) {
-                System.out.println(result);
-            }
-        }
     }
     private boolean preloginStep() {
         System.out.print("[LOGGED_OUT] >>> ");

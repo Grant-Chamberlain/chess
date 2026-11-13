@@ -1,5 +1,9 @@
 package client;
 
+import chess.ChessBoard;
+import chess.ChessGame;
+import chess.ChessPiece;
+import chess.ChessPosition;
 import service.CreateGameRequest;
 import service.GameSummary;
 import service.JoinGameRequest;
@@ -79,8 +83,8 @@ public class PostloginClient {
                 return "Color must be white or black.";
             }
             facade.joinGame(new JoinGameRequest(color, game.gameID()), authToken);
-            return "Joined \"" + game.gameName() + "\" as " + color.toLowerCase() + ".";
-
+            return "Joined \"" + game.gameName() + "\" as " + color.toLowerCase() + "." + "\n"
+                    + boardPrintHelper(color);
         } catch (ResponseException e) {
             return "Could not join game: " + e.getMessage();
         }
@@ -92,7 +96,7 @@ public class PostloginClient {
             if (game == null) {
                 return INVALID_GAME;
             }
-            return "Observing \"" + game.gameName() + "\".";
+            return "Observing \"" + game.gameName() + "\"." + "\n" + boardPrintHelper("WHITE");
         } catch (ResponseException e) {
             return "Could not observe game: " + e.getMessage();
         }
@@ -133,6 +137,12 @@ public class PostloginClient {
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+    private String boardPrintHelper(String color) {
+        ChessBoard board = new ChessBoard();
+        board.resetBoard();
+        return BoardPrinter.draw(board, ChessGame.TeamColor.valueOf(color));
+
     }
 
 
