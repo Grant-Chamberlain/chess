@@ -49,7 +49,7 @@ public class Repl {
 
     private void postloginStep() {
         System.out.print("[LOGGED_IN] >>> ");
-        System.out.println(postlogin.eval(scanner.nextLine());
+        System.out.println(postlogin.eval(scanner.nextLine()));
         if (postlogin.isLoggedOut()) {
             postlogin = null;
             prelogin.clearSession();
